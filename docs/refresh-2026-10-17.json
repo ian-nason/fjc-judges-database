@@ -1,0 +1,440 @@
+{
+  "source_snapshot": "2026-10-17",
+  "sources": [
+    {
+      "file": "judges.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/judges.csv",
+      "size": 5456124,
+      "etag": "\"5340fc-65e023a2ccd37\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:19 GMT",
+      "sha256": "99a17f0c970daa74d91f29cfe47a61287f58a103d4e62be6084d81f9f89ad48c",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "demographics.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/demographics.csv",
+      "size": 492229,
+      "etag": "\"782c5-65e023a3bf72c\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:20 GMT",
+      "sha256": "0256d68c79e9aa808ffd7c75be701bc63b37ec7cf223f8185bc226d1c04e01bd",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "education.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/education.csv",
+      "size": 682093,
+      "etag": "\"a686d-65e023a67c090\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:23 GMT",
+      "sha256": "0b8bb078b6edce88e25ba47bf87f72a45b475f0b0f562e0a7793c87d21c58e2a",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "federal-judicial-service.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/federal-judicial-service.csv",
+      "size": 1639107,
+      "etag": "\"1902c3-65e023a5886c2\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:22 GMT",
+      "sha256": "92b677f26553b4796e139651e4703ce6911e109ea2dfaace7f9a8fa6c68343b4",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "other-federal-judicial-service.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/other-federal-judicial-service.csv",
+      "size": 142447,
+      "etag": "\"22c6f-65e023a5a395c\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:22 GMT",
+      "sha256": "81d66b38f5b75a28f3877abb163001117a3a506be0b98afea8488ab1d723d05f",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "other-nominations-recess.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/other-nominations-recess.csv",
+      "size": 118841,
+      "etag": "\"1d039-65e023a860f91\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:25 GMT",
+      "sha256": "e75c02d5e22b03cd8bfaf57ee3d0f63ca5198f53899227b792615df305ac3f5c",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "professional-career.csv",
+      "url": "https://www.fjc.gov/sites/default/files/history/professional-career.csv",
+      "size": 1956390,
+      "etag": "\"1dda26-65e023a835ff9\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:24 GMT",
+      "sha256": "4442ceb3d8e148d7ad7e71e497fee505290e065238c2dc8dedf4e07e4c3f2bb5",
+      "post_download_identity_verified": true
+    },
+    {
+      "file": "categories.xlsx",
+      "url": "https://www.fjc.gov/sites/default/files/history/categories.xlsx",
+      "size": 1885851,
+      "etag": "\"1cc69b-65e023b154f7c\"",
+      "last_modified": "Sat, 17 Oct 2026 05:05:34 GMT",
+      "sha256": "adf069d3e77b6432b7a29c32133ab52d803498f438ce34d2cc6a6573394da3b6",
+      "post_download_identity_verified": true
+    }
+  ],
+  "dictionary_sha256": "4449df0937282b2a990e613b60e8effec73891f739df52af7904f61b3f5422ea",
+  "validation": {
+    "status": "validated",
+    "utc": "2026-10-17T23:52:44.226722+00:00",
+    "bytes": 3682304,
+    "sha256": "a5a3315f1dba24ed69ea8a4e705288cc927a803727bd3fbb5242e43859ae67ac",
+    "counts": {
+      "judges": {
+        "old": 4074,
+        "new": 4077,
+        "delta": 3,
+        "source_records": 4077
+      },
+      "federal_judicial_service": {
+        "old": 4774,
+        "new": 4777,
+        "delta": 3,
+        "source_records": 4777
+      },
+      "education": {
+        "old": 8153,
+        "new": 8159,
+        "delta": 6,
+        "source_records": 8159
+      },
+      "professional_career": {
+        "old": 19313,
+        "new": 19330,
+        "delta": 17,
+        "source_records": 19330
+      },
+      "other_federal_judicial_service": {
+        "old": 618,
+        "new": 618,
+        "delta": 0,
+        "source_records": 618
+      },
+      "other_nominations_recess": {
+        "old": 836,
+        "new": 836,
+        "delta": 0,
+        "source_records": 836
+      }
+    },
+    "chief_year_counts": [
+      1271,
+      1167,
+      5,
+      4
+    ],
+    "typed_audits": [
+      {
+        "table": "judges",
+        "column": "nid",
+        "source_nonblank": 4077,
+        "typed_nonnull": 4077
+      },
+      {
+        "table": "judges",
+        "column": "jid",
+        "source_nonblank": 4077,
+        "typed_nonnull": 4077
+      },
+      {
+        "table": "judges",
+        "column": "birth_month",
+        "source_nonblank": 2360,
+        "typed_nonnull": 2360
+      },
+      {
+        "table": "judges",
+        "column": "birth_day",
+        "source_nonblank": 2357,
+        "typed_nonnull": 2357
+      },
+      {
+        "table": "judges",
+        "column": "birth_year",
+        "source_nonblank": 4076,
+        "typed_nonnull": 4075
+      },
+      {
+        "table": "judges",
+        "column": "death_month",
+        "source_nonblank": 2386,
+        "typed_nonnull": 2386
+      },
+      {
+        "table": "judges",
+        "column": "death_day",
+        "source_nonblank": 2384,
+        "typed_nonnull": 2384
+      },
+      {
+        "table": "judges",
+        "column": "death_year",
+        "source_nonblank": 2387,
+        "typed_nonnull": 2387
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "nid",
+        "source_nonblank": 4777,
+        "typed_nonnull": 4777
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "sequence",
+        "source_nonblank": 4777,
+        "typed_nonnull": 4777
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "recess_appointment_date",
+        "source_nonblank": 331,
+        "typed_nonnull": 331
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "nomination_date",
+        "source_nonblank": 4616,
+        "typed_nonnull": 4616
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "committee_referral_date",
+        "source_nonblank": 4424,
+        "typed_nonnull": 4424
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "hearing_date",
+        "source_nonblank": 3075,
+        "typed_nonnull": 3075
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "committee_action_date",
+        "source_nonblank": 4404,
+        "typed_nonnull": 4404
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "confirmation_date",
+        "source_nonblank": 4588,
+        "typed_nonnull": 4588
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "commission_date",
+        "source_nonblank": 4743,
+        "typed_nonnull": 4743
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "chief_judge_begin",
+        "source_nonblank": 1271,
+        "legacy_date_nonnull": 0,
+        "precision_year_nonnull": 1271
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "chief_judge_end",
+        "source_nonblank": 1167,
+        "legacy_date_nonnull": 0,
+        "precision_year_nonnull": 1167
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "chief_judge_2nd_begin",
+        "source_nonblank": 5,
+        "legacy_date_nonnull": 0,
+        "precision_year_nonnull": 5
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "chief_judge_2nd_end",
+        "source_nonblank": 4,
+        "legacy_date_nonnull": 0,
+        "precision_year_nonnull": 4
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "senior_status_date",
+        "source_nonblank": 2077,
+        "typed_nonnull": 2077
+      },
+      {
+        "table": "federal_judicial_service",
+        "column": "termination_date",
+        "source_nonblank": 3306,
+        "typed_nonnull": 3306
+      },
+      {
+        "table": "education",
+        "column": "nid",
+        "source_nonblank": 8159,
+        "typed_nonnull": 8159
+      },
+      {
+        "table": "education",
+        "column": "sequence",
+        "source_nonblank": 8159,
+        "typed_nonnull": 8159
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "source_nonblank": 7836,
+        "typed_nonnull": 7831
+      },
+      {
+        "table": "professional_career",
+        "column": "nid",
+        "source_nonblank": 19330,
+        "typed_nonnull": 19330
+      },
+      {
+        "table": "professional_career",
+        "column": "sequence",
+        "source_nonblank": 19330,
+        "typed_nonnull": 19330
+      },
+      {
+        "table": "other_federal_judicial_service",
+        "column": "nid",
+        "source_nonblank": 618,
+        "typed_nonnull": 618
+      },
+      {
+        "table": "other_federal_judicial_service",
+        "column": "sequence",
+        "source_nonblank": 618,
+        "typed_nonnull": 618
+      },
+      {
+        "table": "other_nominations_recess",
+        "column": "nid",
+        "source_nonblank": 836,
+        "typed_nonnull": 836
+      },
+      {
+        "table": "other_nominations_recess",
+        "column": "sequence",
+        "source_nonblank": 836,
+        "typed_nonnull": 836
+      }
+    ],
+    "source_exceptions": [
+      {
+        "table": "judges",
+        "column": "birth_year",
+        "record_key": [
+          "1383686",
+          "1353"
+        ],
+        "source_value": "ca. 1793",
+        "typed_value": null,
+        "preserved_in_column": "birth_year_raw",
+        "present_in_previous_source": true
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "record_key": [
+          "1377186",
+          "2"
+        ],
+        "source_value": "1949-1951",
+        "typed_value": null,
+        "preserved_in_column": "degree_year_raw",
+        "present_in_previous_source": true
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "record_key": [
+          "1378396",
+          "1"
+        ],
+        "source_value": "ca. 1830",
+        "typed_value": null,
+        "preserved_in_column": "degree_year_raw",
+        "present_in_previous_source": true
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "record_key": [
+          "1386066",
+          "1"
+        ],
+        "source_value": "ca. 1800",
+        "typed_value": null,
+        "preserved_in_column": "degree_year_raw",
+        "present_in_previous_source": true
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "record_key": [
+          "1386226",
+          "3"
+        ],
+        "source_value": "ca. 1800",
+        "typed_value": null,
+        "preserved_in_column": "degree_year_raw",
+        "present_in_previous_source": true
+      },
+      {
+        "table": "education",
+        "column": "degree_year",
+        "record_key": [
+          "1386516",
+          "1"
+        ],
+        "source_value": "ca. 1790",
+        "typed_value": null,
+        "preserved_in_column": "degree_year_raw",
+        "present_in_previous_source": true
+      }
+    ],
+    "queries": {
+      "current_appointments": 1471,
+      "dates": [
+        "1789-09-26",
+        "2026-10-02"
+      ],
+      "recent": [
+        [
+          13762147,
+          "U.S. Court of Appeals for the Sixth Circuit",
+          "2026-10-02"
+        ],
+        [
+          13762214,
+          "U.S. District Court for the Northern District of Texas",
+          "2026-10-02"
+        ],
+        [
+          13762157,
+          "U.S. District Court for the Southern District of Ohio",
+          "2026-09-30"
+        ],
+        [
+          13762144,
+          "U.S. District Court for the Southern District of Florida",
+          "2026-08-10"
+        ],
+        [
+          13762149,
+          "U.S. District Court for the Eastern District of Pennsylvania",
+          "2026-08-10"
+        ]
+      ],
+      "metadata": [
+        6,
+        37797
+      ]
+    },
+    "peak_validation_rss_kib": 88304,
+    "stage_allocated_bytes": 23199744
+  }
+}

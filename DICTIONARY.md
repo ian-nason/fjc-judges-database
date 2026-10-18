@@ -1,14 +1,15 @@
 # fjc-judges Data Dictionary
 
 Source: [FJC Biographical Directory of Article III Federal Judges, export files](https://www.fjc.gov/history/judges/biographical-directory-article-iii-federal-judges-export).
-Column names are the export headers in snake_case; dates are DATE; free-text entries are as the FJC wrote them.
+Column names are the export headers in snake_case; full dates are DATE; free-text entries are as the FJC wrote them.
+Chief-judge service is often year-only: use the four chief_judge_*_year columns. Existing DATE columns remain NULL for year-only values. birth_year_raw and degree_year_raw preserve approximate years and ranges.
 `v_current_judges` lists appointments with no termination date (active and senior judges).
 
 ## judges
 
 One row per Article III judge, 1789-present: name, birth and death date/place, gender, race or ethnicity (FJC Biographical Directory)
 
-Rows: 4,074
+Rows: 4,077
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
@@ -25,17 +26,18 @@ Rows: 4,074
 | birth_state | VARCHAR | 0.0% | AK |  |
 | death_month | INTEGER | 41.5% | 1 |  |
 | death_day | INTEGER | 41.5% | 1 |  |
-| death_year | INTEGER | 41.4% | 1790 |  |
-| death_city | VARCHAR | 58.4% | (Belmont), Philadelphia |  |
+| death_year | INTEGER | 41.5% | 1790 |  |
+| death_city | VARCHAR | 58.5% | (Belmont), Philadelphia |  |
 | death_state | VARCHAR | 58.3% | AK |  |
 | gender | VARCHAR | 0.0% | Declined to Report |  |
 | race_or_ethnicity | VARCHAR | 0.0% | African American |  |
+| birth_year_raw | VARCHAR | 0.0% | 1732 |  |
 
 ## federal_judicial_service
 
 One row per Article III appointment: court, appointing president and party, ABA rating, seat, nomination, committee, Senate vote and confirmation dates, commission date, chief-judge service, senior status, termination and reason
 
-Rows: 4,774
+Rows: 4,777
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
@@ -55,7 +57,7 @@ Rows: 4,774
 | recess_appointment_date | DATE | 93.1% | 1789-11-18 |  |
 | nomination_date | DATE | 3.4% | 1789-09-24 |  |
 | committee_referral_date | DATE | 7.4% | 1826-05-08 |  |
-| hearing_date | DATE | 35.7% | 1890-02-17 |  |
+| hearing_date | DATE | 35.6% | 1890-02-17 |  |
 | judiciary_committee_action | VARCHAR | 3.4% | No Committee before December 10, 1816 |  |
 | committee_action_date | DATE | 7.8% | 1826-05-22 |  |
 | senate_vote_type | VARCHAR | 3.8% | Roll Call |  |
@@ -66,15 +68,19 @@ Rows: 4,774
 | chief_judge_end | DATE | 100.0% |  |  |
 | chief_judge_2nd_begin | DATE | 100.0% |  |  |
 | chief_judge_2nd_end | DATE | 100.0% |  |  |
-| senior_status_date | DATE | 56.6% | 1919-10-06 |  |
+| senior_status_date | DATE | 56.5% | 1919-10-06 |  |
 | termination | VARCHAR | 30.8% | Abolition of Court |  |
 | termination_date | DATE | 30.8% | 1790-05-18 |  |
+| chief_judge_begin_year | INTEGER | 73.4% | 1801 |  |
+| chief_judge_end_year | INTEGER | 75.6% | 1802 |  |
+| chief_judge_2nd_begin_year | INTEGER | 99.9% | 1966 |  |
+| chief_judge_2nd_end_year | INTEGER | 99.9% | 1968 |  |
 
 ## education
 
 One row per degree: school, degree, year
 
-Rows: 8,153
+Rows: 8,159
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|
@@ -84,12 +90,13 @@ Rows: 8,153
 | school | VARCHAR | 0.0% | Abilene Christian University |  |
 | degree | VARCHAR | 12.1% | A.A. |  |
 | degree_year | INTEGER | 4.0% | 1751 |  |
+| degree_year_raw | VARCHAR | 4.0% | 1751 |  |
 
 ## professional_career
 
 One row per professional-career entry as written by the FJC (clerkships, practice, prior judgeships), in sequence
 
-Rows: 19,313
+Rows: 19,330
 
 | Column | Type | Nulls | Example | Join |
 |--------|------|-------|---------|------|

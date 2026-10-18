@@ -69,7 +69,8 @@ def load(con, t: str) -> int:
     path = RAW / FILES[t]
     con.execute(f"CREATE OR REPLACE TABLE _raw AS SELECT * FROM read_csv('{path}', all_varchar=true, header=true, sample_size=-1)")
     header = [r[0] for r in con.execute("DESCRIBE _raw").fetchall()]
-    exprs, seen = [], set()
+    exprs, seen, precision_exprs = [], set(), []
+    chief_columns = {"chief_judge_begin", "chief_judge_end", "chief_judge_2nd_begin", "chief_judge_2nd_end"}
     for h in header:
         if not h.strip() or h.startswith("column"):  # trailing unnamed columns in other-federal-judicial-service.csv
             continue
@@ -79,15 +80,31 @@ def load(con, t: str) -> int:
             raise RuntimeError(f"{t}: duplicate column {c}")
         seen.add(c)
         clean = f'NULLIF(TRIM("{h}"), \'\')'
+        if c in chief_columns:
+            precision_exprs.append(f"CASE WHEN regexp_full_match({clean}, '[0-9]{{4}}') THEN CAST({clean} AS INTEGER) ELSE EXTRACT(YEAR FROM TRY_CAST({clean} AS DATE))::INTEGER END AS {c}_year")
+            invalid = con.execute(f"SELECT COUNT(*) FROM _raw WHERE {clean} IS NOT NULL AND NOT regexp_full_match({clean}, '[0-9]{{4}}') AND TRY_CAST({clean} AS DATE) IS NULL").fetchone()[0]
+            if invalid:
+                raise ValueError(f"{t}.{c}: unsupported source date precision")
+        if c in {"birth_year", "degree_year"}:
+            precision_exprs.append(f"{clean} AS {c}_raw")
         if key in DATE_COLS:
+            if c not in chief_columns:
+                invalid = con.execute(f"SELECT COUNT(*) FROM _raw WHERE {clean} IS NOT NULL AND TRY_CAST({clean} AS DATE) IS NULL").fetchone()[0]
+                if invalid:
+                    raise ValueError(f"{t}.{c}: unparseable source DATE ({invalid} values)")
             exprs.append(f"TRY_CAST({clean} AS DATE) AS {c}")
         elif c in INT_COLS:
-            exprs.append(f"TRY_CAST({clean} AS INTEGER) AS {c}")
+            valid = f"regexp_full_match({clean}, '[+-]?[0-9]+') AND TRY_CAST({clean} AS INTEGER) IS NOT NULL"
+            if c not in {"birth_year", "degree_year"}:
+                invalid = con.execute(f"SELECT COUNT(*) FROM _raw WHERE {clean} IS NOT NULL AND NOT ({valid})").fetchone()[0]
+                if invalid:
+                    raise ValueError(f"{t}.{c}: unparseable source INTEGER ({invalid} values)")
+            exprs.append(f"CASE WHEN {valid} THEN TRY_CAST({clean} AS INTEGER) END AS {c}")
         elif c == "ayes_nays":
             exprs.append(f"{clean} AS {c}")
         else:
             exprs.append(f"{clean} AS {c}")
-    con.execute(f"CREATE OR REPLACE TABLE {t} AS SELECT {', '.join(exprs)} FROM _raw")
+    con.execute(f"CREATE OR REPLACE TABLE {t} AS SELECT {', '.join(exprs + precision_exprs)} FROM _raw")
     con.execute("DROP TABLE _raw")
     return con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
 
@@ -102,19 +119,32 @@ def run_validation(con) -> int:
     ck.query(con, "federal_judicial_service: commission_date parsed (> 99%)",
              "SELECT COUNT(commission_date) * 1.0 / COUNT(*) FROM federal_judicial_service", lambda v: v > 0.99, lambda v: f"{v:.2%}")
     ck.query(con, "federal_judicial_service: earliest commission 1789", "SELECT MIN(commission_date) FROM federal_judicial_service", lambda d: str(d).startswith("1789"), str)
-    ck.query(con, "federal_judicial_service: a 2026 commission exists", "SELECT MAX(commission_date) FROM federal_judicial_service", lambda d: str(d) >= "2025-01-01", str)
+    ck.query(con, "federal_judicial_service: a 2026 commission exists", "SELECT MAX(commission_date) FROM federal_judicial_service", lambda d: str(d) >= "2026-01-01", str)
     ck.query(con, "federal_judicial_service: (nid, sequence) unique", "SELECT COUNT(*) - COUNT(DISTINCT (nid, sequence)) FROM federal_judicial_service", lambda n: n == 0, str)
     ck.query(con, "federal_judicial_service: court_type populated", "SELECT COUNT(court_type) * 1.0 / COUNT(*) FROM federal_judicial_service", lambda v: v > 0.999, lambda v: f"{v:.2%}")
     ck.query(con, "judges: birth_year populated (> 95%)", "SELECT COUNT(birth_year) * 1.0 / COUNT(*) FROM judges", lambda v: v > 0.95, lambda v: f"{v:.1%}")
+    ck.query(con, "chief-judge year precision retained", "SELECT COUNT(chief_judge_begin_year) FROM federal_judicial_service", lambda n: n >= 1000, str)
     return ck.report()
 
 
 def main():
+    global RAW
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", type=Path, default=Path(DEFAULT_OUTPUT))
+    ap.add_argument("--raw-dir", type=Path, default=RAW)
+    ap.add_argument("--dictionary", type=Path, default=Path("DICTIONARY.md"))
     a = ap.parse_args()
+    RAW = a.raw_dir
     t0 = time.time()
-    con = connect(a.output, fresh=True, memory_limit="2GB", threads=2)
+    if a.output.exists() or Path(str(a.output) + ".wal").exists():
+        raise FileExistsError(f"Refusing to overwrite existing database or WAL: {a.output}")
+    missing = [str(RAW / filename) for filename in FILES.values() if not (RAW / filename).is_file()]
+    if missing:
+        raise FileNotFoundError("Missing raw sources: " + ", ".join(missing))
+    if a.dictionary.exists():
+        raise FileExistsError(f"Refusing to overwrite existing dictionary: {a.dictionary}")
+    con = connect(a.output, memory_limit="1GB", threads=1)
+    con.execute("SET max_temp_directory_size = '256MiB'")
     counts = {t: load(con, t) for t in FILES}
     for t, n in counts.items():
         print(f"  {t}: {n:,} rows")
@@ -127,9 +157,10 @@ def main():
     print("\nMetadata + dictionary")
     ensure_metadata(con, descriptions=TABLE_DESCRIPTIONS, tables=list(FILES), source_url=SOURCE_URL, license="Public domain", replace=True)
     build_columns_table(con, join_hints=JOIN_HINTS, tables=list(FILES))
-    export_dictionary(con, Path("DICTIONARY.md"), title="fjc-judges Data Dictionary",
+    export_dictionary(con, a.dictionary, title="fjc-judges Data Dictionary",
                       intro=[f"Source: [FJC Biographical Directory of Article III Federal Judges, export files]({SOURCE_URL}).",
-                             "Column names are the export headers in snake_case; dates are DATE; free-text entries are as the FJC wrote them.",
+                             "Column names are the export headers in snake_case; full dates are DATE; free-text entries are as the FJC wrote them.",
+                             "Chief-judge service is often year-only: use the four chief_judge_*_year columns. Existing DATE columns remain NULL for year-only values. birth_year_raw and degree_year_raw preserve approximate years and ranges.",
                              "`v_current_judges` lists appointments with no termination date (active and senior judges)."],
                       style="registry", tables=list(FILES))
     con.execute("CHECKPOINT")

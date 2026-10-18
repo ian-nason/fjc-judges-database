@@ -1,0 +1,101 @@
+{
+  "repo": "Nason/fjc-judges-database",
+  "commit": "ed77e33910daecf8467fba011743b1d0d6b0a2df",
+  "sha256": "a5a3315f1dba24ed69ea8a4e705288cc927a803727bd3fbb5242e43859ae67ac",
+  "bytes": 3682304,
+  "status": "verified",
+  "url": "https://huggingface.co/datasets/Nason/fjc-judges-database/commit/ed77e33910daecf8467fba011743b1d0d6b0a2df",
+  "previous_commit": "f0eb84a20ecb7497f21d88ca82071b7f175995cf",
+  "remote_checks": {
+    "ed77e33910daecf8467fba011743b1d0d6b0a2df": {
+      "identity": "lfs-sha256",
+      "tables": [
+        [
+          "education",
+          8159
+        ],
+        [
+          "federal_judicial_service",
+          4777
+        ],
+        [
+          "judges",
+          4077
+        ],
+        [
+          "other_federal_judicial_service",
+          618
+        ],
+        [
+          "other_nominations_recess",
+          836
+        ],
+        [
+          "professional_career",
+          19330
+        ]
+      ],
+      "actual_counts": {
+        "education": 8159,
+        "federal_judicial_service": 4777,
+        "judges": 4077,
+        "other_federal_judicial_service": 618,
+        "other_nominations_recess": 836,
+        "professional_career": 19330
+      },
+      "chief_years_and_latest_commission": [
+        1271,
+        1167,
+        5,
+        4,
+        "2026-10-02"
+      ]
+    },
+    "main": {
+      "identity": "lfs-sha256",
+      "tables": [
+        [
+          "education",
+          8159
+        ],
+        [
+          "federal_judicial_service",
+          4777
+        ],
+        [
+          "judges",
+          4077
+        ],
+        [
+          "other_federal_judicial_service",
+          618
+        ],
+        [
+          "other_nominations_recess",
+          836
+        ],
+        [
+          "professional_career",
+          19330
+        ]
+      ],
+      "actual_counts": {
+        "education": 8159,
+        "federal_judicial_service": 4777,
+        "judges": 4077,
+        "other_federal_judicial_service": 618,
+        "other_nominations_recess": 836,
+        "professional_career": 19330
+      },
+      "chief_years_and_latest_commission": [
+        1271,
+        1167,
+        5,
+        4,
+        "2026-10-02"
+      ]
+    }
+  },
+  "verified_main_head": "ed77e33910daecf8467fba011743b1d0d6b0a2df",
+  "verified_utc": "2026-10-18T00:00:40.139087+00:00"
+}

@@ -12,9 +12,11 @@ intro: |
   Directory: demographics, every appointment with its nomination -> confirmation -> commission
   timeline, chief-judge and senior-status dates, education, career, and other federal judicial
   service. Six normalised tables joined on `nid`, plus `v_current_judges`.
+  Snapshot: October 17, 2026. Chief-judge year columns and raw birth/degree-year text
+  preserve source precision; no first-of-year dates are invented.
 quick_start_sql: |
   SELECT appointing_president, COUNT(*) AS judges, ROUND(AVG(confirmation_date - nomination_date)) AS avg_days_to_confirm
-  FROM "fjc-judges".federal_judicial_service WHERE nomination_date >= '1981-01-01'
+  FROM fjc_judges.federal_judicial_service WHERE nomination_date >= '1981-01-01'
   GROUP BY 1 ORDER BY MIN(nomination_date);
 footer: |
   Build pipeline and caveats: https://github.com/ian-nason/fjc-judges-database
