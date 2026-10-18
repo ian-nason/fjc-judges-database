@@ -104,8 +104,11 @@ Both pinned and `main` hashes, table counts and source-precision queries must pa
 LFS hashes are checked directly; plain blobs are hashed with a bounded streamed read.
 
 The receipt records the previous immutable Hugging Face commit. To roll back an
-incorrect publication, retrieve and verify the four prior files at that revision,
-then create a new atomic commit restoring them, guarded by the current remote head.
+incorrect publication, retrieve and verify the prior database and README at that
+revision, then restore them in one new commit guarded by the current remote head.
+The previous October baseline had no dictionary or source-provenance file: also
+remove the two newly introduced hosted metadata paths in that rollback commit,
+while retaining their local evidence. Leave `.gitattributes` unchanged.
 Do not reset history, delete the retained local source/candidate, or automatically
 overwrite a head that another publisher has changed.
 
