@@ -14,10 +14,19 @@ intro: |
   service. Six normalised tables joined on `nid`, plus `v_current_judges`.
   Snapshot: October 17, 2026. Chief-judge year columns and raw birth/degree-year text
   preserve source precision; no first-of-year dates are invented.
+  Appointment counts are not distinct-judge counts. `v_current_judges` is current only as of this snapshot.
+  Within this database join on `nid`; CourtListener `judges.fjc_id` joins this directory's `judges.jid`.
 quick_start_sql: |
-  SELECT appointing_president, COUNT(*) AS judges, ROUND(AVG(confirmation_date - nomination_date)) AS avg_days_to_confirm
+  SELECT appointing_president, COUNT(*) AS appointments, ROUND(AVG(confirmation_date - nomination_date)) AS avg_days_to_confirm
   FROM fjc_judges.federal_judicial_service WHERE nomination_date >= '1981-01-01'
   GROUP BY 1 ORDER BY MIN(nomination_date);
 footer: |
   Build pipeline and caveats: https://github.com/ian-nason/fjc-judges-database
   Source: https://www.fjc.gov/history/judges (public domain).
+
+
+  ## Installation and query limits
+
+  Install or upgrade Python datapond (tested 0.1.5), or use CRAN R datapond 0.1.0. R 0.1.1 is a separate development version. Remote queries run on your machine. File size is disk storage, not required RAM; selected columns reduce transfer, but filters and a final `LIMIT` do not guarantee a small scan. A 128 MiB setting limits DuckDB's buffer pool, not the whole Python/R process. Larger queries can fail with spill disabled. Download only when you have room for the file, temporary download bytes and any existing copy.
+
+  Count appointment rows separately from distinct judges. Join within this directory on nid; for CourtListener use CourtListener fjc_id = judges.jid.
