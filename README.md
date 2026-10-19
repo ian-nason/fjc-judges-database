@@ -15,24 +15,42 @@ and other federal judicial service. Companion to [fjc](https://github.com/ian-na
 | `other_federal_judicial_service` | non-Article III federal judicial post (magistrate, bankruptcy, territorial ...) | 618 |
 | `other_nominations_recess` | unsuccessful nomination or recess appointment (free text) | 836 |
 
-`nid` joins everything. `v_current_judges` lists appointments with no termination date
-(active and senior judges). Columns and null rates: `DICTIONARY.md`.
+`nid` links the six tables within this directory. Child tables have several rows per judge, so count distinct `nid` values for people and appointment rows for service records. For CourtListener, join `courtlistener.judges.fjc_id` to this database's `judges.jid`, not `nid`.
+
+`v_current_judges` lists appointments with no termination date as recorded in the October 17, 2026 snapshot (active and senior service). It is not a live roster. Columns and null rates: [DICTIONARY.md](DICTIONARY.md).
 
 ## Quick start
+
+The database file is 3.5 MiB on disk.
+
+Install/upgrade Python with `python -m pip install --upgrade datapond` (the examples use 0.1.5), or install released R datapond from [CRAN](https://cran.r-project.org/package=datapond) with `install.packages("datapond")`. R 0.1.1 remains a separate development version. Python 0.1.1 cannot attach the hyphenated `fjc-judges` ID; upgrade before running this example.
+
+Remote queries run on your machine. File size is disk storage, not required RAM; selected columns reduce transfer, but filters and a final `LIMIT` do not guarantee a small scan. A 128 MiB setting limits DuckDB's buffer pool, not the whole Python/R process. Larger queries can fail with spill disabled. Download only when you have room for the file, temporary download bytes and any existing copy. The package examples below set limits immediately after connecting. For settings before attachment, use the [direct SQL quick start in the dataset card](https://huggingface.co/datasets/Nason/fjc-judges-database#quick-start) in a DuckDB SQL client.
 
 ```python
 import datapond
 con = datapond.connect("fjc-judges")
+con.execute("SET memory_limit='128MiB'; SET threads=1; SET max_temp_directory_size='0B'")
 con.sql("""
-    SELECT party_of_appointing_president AS party, EXTRACT(YEAR FROM commission_date) // 10 * 10 AS decade, COUNT(*) AS judges
+    SELECT party_of_appointing_president AS party, EXTRACT(YEAR FROM commission_date) // 10 * 10 AS decade, COUNT(*) AS appointments
     FROM federal_judicial_service WHERE court_type = 'U.S. Court of Appeals'
     GROUP BY 1, 2 ORDER BY 2, 1
 """).show()
+con.close()
 ```
+
+```r
+con <- datapond::dp_connect("fjc-judges")
+DBI::dbExecute(con, "SET memory_limit='128MiB'; SET threads=1; SET max_temp_directory_size='0B'")
+DBI::dbGetQuery(con, "SELECT count(*) AS judges FROM judges")
+datapond::dp_disconnect(con)
+```
+
+The following SQL assumes this database is the default catalog. Its count is appointment records, not distinct judges; the average uses only non-NULL date differences.
 
 ```sql
 -- days from nomination to confirmation, by president
-SELECT appointing_president, COUNT(*) AS n, ROUND(AVG(confirmation_date - nomination_date)) AS avg_days
+SELECT appointing_president, COUNT(*) AS appointments, ROUND(AVG(confirmation_date - nomination_date)) AS avg_days
 FROM federal_judicial_service WHERE nomination_date >= '1981-01-01' GROUP BY 1 ORDER BY MIN(nomination_date);
 ```
 
@@ -50,7 +68,7 @@ entries. This recovers 2,447 populated year values previously lost during conver
 ## Researcher caveats
 
 - The FJC updates the export as judges are commissioned or leave; this build is a snapshot
-  (`_metadata.built_at`). Rebuild to refresh.
+  (`_metadata.built_at`). A new audited build is needed to refresh it; no automatic refresh is promised.
 - `judges.csv` on the FJC site is the same data denormalised into 225 columns; it is not
   loaded. The wide-to-long export files are.
 - Free-text tables (`professional_career`, `other_nominations_recess`,
@@ -115,3 +133,5 @@ overwrite a head that another publisher has changed.
 ## License
 
 Code: MIT. Data: public domain (Federal Judicial Center).
+
+The reviewed current hosted card is retained in [HF-README.md](HF-README.md). The checked publisher still generates future cards from `card.yaml`; that template includes recurring reader guidance. Compare the generated card against this reviewed copy before upload. For a future release, update counts and version links, retain the guidance and caveats, and inspect the rendered card before upload.
